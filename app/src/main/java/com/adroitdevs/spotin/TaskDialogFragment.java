@@ -83,7 +83,6 @@ public class TaskDialogFragment extends DialogFragment {
             builder.setView(v).setPositiveButton(R.string.create, positiveClick);
         }
 
-        // Create onClick listener for cancel button.
         // Buat listener onClick untuk tombol batal.
         DialogInterface.OnClickListener negativeClick = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

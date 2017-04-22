@@ -10,16 +10,16 @@ import android.view.View;
 import android.widget.Toast;
 
 /**
- * Shows Cloudant sync progress; Download and Upload dialogs.
+ * Menunjukkan proses sinkronisasi Cloudant; Download dan Upload dialog.
  */
 public class ProgressDialogFragment extends DialogFragment {
 
     /**
-     * ProgressDialogFragment constructor.
+     * Konstruktor ProgressDialogFragment.
      *
-     * @param title   Title of the Alert, referenced by its resource id.
-     * @param message Message contents of the Alert dialog.
-     * @return The constructed ProgressDialogFragment.
+     * @param title   Title of the Alert, yang diacu oleh id sumbernya.
+     * @param message Isi pesan pada dialog Alert.
+     * @return ProgressDialogFragment yang dibangun.
      */
     public static ProgressDialogFragment newInstance(int title, String message) {
         ProgressDialogFragment frag = new ProgressDialogFragment();
@@ -32,7 +32,7 @@ public class ProgressDialogFragment extends DialogFragment {
         return frag;
     }
 
-    // Create progress dialog with appropriate properties and interaction; Upload vs Download.
+    // Buat dialog proses dengan sifat dan interaksi yang sesuai; Upload vs Download
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -43,7 +43,7 @@ public class ProgressDialogFragment extends DialogFragment {
 
         final View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_loading, null);
 
-        // Create onclick listener for cancel button to stop replication.
+        // Buat listener onclick untuk tombol cancel agar berhenti melakukan replikasi.
         DialogInterface.OnClickListener negativeClick = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -51,7 +51,7 @@ public class ProgressDialogFragment extends DialogFragment {
             }
         };
 
-        // Create keylistener to indicate replication is still running when the back button is pressed.
+        // Buat keylistener untuk menunjukkan replikasi masih berjalan saat tombol back ditekan.
         DialogInterface.OnKeyListener keyListener = new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
@@ -64,7 +64,7 @@ public class ProgressDialogFragment extends DialogFragment {
             }
         };
 
-        // Set above listeners to the dialog being created.
+        // Mengatur listener diatas ke dialog yang sedang dibuat.
         builder.setView(view).setNegativeButton("Stop", negativeClick).setOnKeyListener(keyListener);
 
         return builder.create();

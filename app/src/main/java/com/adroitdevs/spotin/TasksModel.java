@@ -143,7 +143,7 @@ class TasksModel {
         List<DocumentRevision> all = this.mDatastore.getAllDocuments(0, nDocs, true);
         List<Task> tasks = new ArrayList<>();
 
-        // Filter all documents down to those of type Task.
+        // Filter semua dokumen sampai ke tipe Task.
         for (DocumentRevision rev : all) {
             Task t = Task.fromRevision(rev);
             if (t != null) {
@@ -156,7 +156,7 @@ class TasksModel {
 
     /**
      * Berhenti menjalankan replikasi.
-     * <p>
+     *
      * Metode stop() menghentikan replikasi secara asinkron,
      * lihat dokumentasi replikator untuk informasi lebih lanjut.
      */

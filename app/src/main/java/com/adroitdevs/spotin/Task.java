@@ -6,26 +6,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*
- * Object representing a task.
+ * Objek mewakili sebuah task.
  *
- * As well as acting as a value object, this class also has a reference to the original
- * DocumentRevision, which will be valid if the Task was fetched from the database, or else null
- * (eg for Tasks which have been created but not yet saved to the database).
+ * Serta bertindak sebagai objek nilai, kelas ini juga memiliki referensi ke DocumentRevision asli,
+ * yang akan berlaku jika Tugas diambil dari database,
+ * atau null (misalnya untuk Tasks yang telah dibuat namun belum disimpan ke Database).
  *
- * fromRevision() and asMap() act as helpers to map to and from JSON - in a real application
- * something more complex like an object mapper might be used.
+ * fromRevision() dan asMap() bertindak sebagai helpers untuk memetakan dan dari JSON - dalam sebuah aplikasi nyata,
+ * sesuatu yang lebih kompleks seperti mapper objek dapat digunakan.
  */
 
 class Task {
 
-    // Doc type needed to identify and group collective types in the datastore.
+    // Doc type diperlukan untuk mengidentifikasi dan mengelompokkan tipe kolektif di datastore.
     private static final String DOC_TYPE = "com.adroitdevs.spotin";
-    // This is the revision number in the database representing this task.
+    // Ini adalah nomor revisi dalam database yang mewakili tugas ini.
     private DocumentRevision rev;
     private String type = DOC_TYPE;
-    // Variable for the check mark completed flag.
+    // Variabel untuk tanda centang selesai.
     private boolean completed;
-    // Main task text.
+    // Teks tugas utama
     private String description;
 
     private Task() {
@@ -37,7 +37,7 @@ class Task {
         this.setType(DOC_TYPE);
     }
 
-    // Create task object based on doc revision from datastore.
+    // Buat objek tugas berdasarkan revisi doc dari datastore.
     static Task fromRevision(DocumentRevision rev) {
         Task t = new Task();
         t.rev = rev;
@@ -81,7 +81,7 @@ class Task {
         return "{ desc: " + getDescription() + ", completed: " + isCompleted() + "}";
     }
 
-    // Return task as a Hash Map for easy consumption by replicators and datastores.
+    // Return tugas sebagai Hash Map agar mudah dikonsumsi oleh replicators dan datastores.
     Map<String, Object> asMap() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("type", type);

@@ -7,18 +7,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 /**
- * Constructs and displays an error message to the user through a Dialog. Includes an option to finish the
- * Activity if an error results in the application needing to be rebuilt to function.
+ * Buat dan tampilkan pesan kesalahan kepada pengguna melalui Dialog. Termasuk opsi untuk
+ * menyelesaikan Activity jika terjadi kesalahan pada aplikasi yang perlu dibangun kembali agar berfungsi.
  */
 public class ErrorDialogFragment extends DialogFragment {
 
     /**
-     * ErrorDialogFragment constructor.
+     * Konstruktor ErrorDialogFragment.
      *
-     * @param title       Title of the Alert, referenced by its resource id.
-     * @param message     Message contents of the Alert dialog.
-     * @param canContinue Whether the application can continue without needing to be rebuilt.
-     * @return The constructed ErrorDialogFragment.
+     * @param title       Judul Pemberitahuan, yang diacu oleh id sumbernya.
+     * @param message     Isi pesan pada dialog Alert.
+     * @param canContinue Apakah aplikasi bisa berlanjut tanpa perlu dibangun kembali.
+     * @return ErrorDialogFragment yang dibangun.
      */
     public static ErrorDialogFragment newInstance(int title, String message, boolean canContinue) {
         ErrorDialogFragment frag = new ErrorDialogFragment();
@@ -38,7 +38,7 @@ public class ErrorDialogFragment extends DialogFragment {
         String message = getArguments().getString("message");
         boolean canContinue = getArguments().getBoolean("canContinue");
 
-        // If the application still has some functionality, allow the user to dismiss the dialog.
+        // Jika aplikasi masih memiliki beberapa fungsi, biarkan pengguna mengabaikan dialog.
         if (canContinue) {
             return new AlertDialog.Builder(getActivity())
                     .setTitle(title)
@@ -46,13 +46,13 @@ public class ErrorDialogFragment extends DialogFragment {
                     .setPositiveButton(R.string.alert_dialog_ok,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    // Do nothing and dismiss the dialog.
+                                    // Tidak melakukan apapun dan mengabaikan dialognya.
                                 }
                             }
                     )
                     .create();
         } else {
-            // If the application has to be rebuilt for anything to work, we will finish the Activity.
+            // Jika aplikasi harus dibangun kembali untuk pekerjaan apa pun, kita akan menyelesaikan Aktivitas.
             AlertDialog errorDialog = new AlertDialog.Builder(getActivity())
                     .setTitle(title)
                     .setMessage(message)

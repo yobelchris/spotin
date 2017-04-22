@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Custom List Adapter to bridge the gap between visual list view and Cloudant datastore
+ * Custom List Adapter untuk menjembatani kesenjangan antara tampilan daftar visual dan datastore Cloudant
  */
 class TaskAdapter extends BaseAdapter implements ListAdapter {
 
@@ -99,7 +99,7 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
     }
 
     /**
-     * Put the give Task at specified position
+     * Letakkan Task pada posisi yang ditentukan
      */
     void set(int position, Task t) {
         this.tasks.set(position, t);
@@ -107,7 +107,7 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
     }
 
     /**
-     * Remove the Task at specified position
+     * Menghapus Task pada posisi tertentu
      */
     void remove(int position) {
         this.tasks.remove(position);
