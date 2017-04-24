@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="304dp"
+    android:layout_gravity="center"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:foreground="?attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            tools:src="@mipmap/app_icon" />
+
+        <TextView
+            android:id="@+id/textViewJudul"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_marginLeft="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/white"
+            tools:text="Surabaya Night Carnival" />
+
+        <TextView
+            android:id="@+id/textViewDeskripsi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            tools:text="Jl. Halmahera Blok A-9, Jombang, Kab. Jombang" />
+
+        <ImageButton
+            android:id="@+id/buttonFavorite"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textViewDeskripsi"
+            android:tint="#757575"
+            app:srcCompat="@drawable/ic_favorite_black_24dp" />
+
+        <ImageButton
+            android:id="@+id/buttonMap"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@+id/textViewDeskripsi"
+            android:layout_toRightOf="@+id/buttonFavorite"
+            android:tint="#757575"
+            app:srcCompat="@drawable/ic_map_black_24dp" />
+
+        <ImageButton
+            android:id="@+id/buttonCall"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@+id/textViewDeskripsi"
+            android:layout_toRightOf="@id/buttonMap"
+            android:tint="#757575"
+            app:srcCompat="@drawable/ic_call_black_24dp" />
+
+        <TextView
+            android:id="@+id/textViewHarga"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textViewDeskripsi"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:text="Rp89.678,00"
+            android:textColor="#16a085"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

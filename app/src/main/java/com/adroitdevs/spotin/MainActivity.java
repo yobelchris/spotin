@@ -10,6 +10,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(tasks, new Comparator<Task>() {
             @Override
             public int compare(Task task1, Task task2) {
-                return task1.getDescription().compareToIgnoreCase(task2.getDescription());
+                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
             }
         });
 
@@ -193,11 +195,11 @@ public class MainActivity extends AppCompatActivity {
     public void updateTaskAt(int position, String description) {
         try {
             Task t = (Task) mTaskAdapter.getItem(position);
-            t.setDescription(description);
+            t.setJudul(description);
             sTasks.updateDocument(t);
             reloadTasksFromModel();
             Toast.makeText(MainActivity.this,
-                    "Updated item : " + t.getDescription(),
+                    "Updated item : " + t.getJudul(),
                     Toast.LENGTH_SHORT).show();
         } catch (ConflictException e) {
             throw new RuntimeException(e);
@@ -223,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             sTasks.deleteDocument(t);
             mTaskAdapter.remove(position);
             Toast.makeText(MainActivity.this,
-                    "Deleted item : " + t.getDescription(),
+                    "Deleted item : " + t.getJudul(),
                     Toast.LENGTH_SHORT).show();
         } catch (ConflictException e) {
             throw new RuntimeException(e);

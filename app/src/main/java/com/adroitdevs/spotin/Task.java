@@ -26,13 +26,16 @@ class Task {
     // Variabel untuk tanda centang selesai.
     private boolean completed;
     // Teks tugas utama
-    private String description;
+    private String judul;
+    private String lokasi;
+    private String harga;
+    private String gambar;
 
     private Task() {
     }
 
     Task(String desc) {
-        this.setDescription(desc);
+        this.setJudul(desc);
         this.setCompleted(false);
         this.setType(DOC_TYPE);
     }
@@ -43,13 +46,40 @@ class Task {
         t.rev = rev;
 
         Map<String, Object> map = rev.asMap();
-        if (map.containsKey("type") && map.get("type").equals(Task.DOC_TYPE)) {
-            t.setType((String) map.get("type"));
-            t.setCompleted((Boolean) map.get("completed"));
-            t.setDescription((String) map.get("description"));
+        if (/*map.containsKey("type") && map.get("type").equals(Task.DOC_TYPE)*/true) {
+            /*t.setType((String) map.get("type"));
+            t.setCompleted((Boolean) map.get("completed"));*/
+            t.setJudul((String) map.get("nama"));
+            t.setHarga((String) map.get("tarif"));
+            t.setLokasi((String) map.get("lokasi"));
+            t.setGambar((String) map.get("gambar"));
             return t;
         }
         return null;
+    }
+
+    public String getGambar() {
+        return gambar;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
+    }
+
+    public String getLokasi() {
+        return lokasi;
+    }
+
+    public void setLokasi(String lokasi) {
+        this.lokasi = lokasi;
+    }
+
+    public String getHarga() {
+        return harga;
+    }
+
+    public void setHarga(String harga) {
+        this.harga = harga;
     }
 
     DocumentRevision getDocumentRevision() {
@@ -68,17 +98,17 @@ class Task {
         this.completed = completed;
     }
 
-    String getDescription() {
-        return this.description;
+    String getJudul() {
+        return this.judul;
     }
 
-    void setDescription(String desc) {
-        this.description = desc;
+    void setJudul(String desc) {
+        this.judul = desc;
     }
 
     @Override
     public String toString() {
-        return "{ desc: " + getDescription() + ", completed: " + isCompleted() + "}";
+        return "{ nama: " + getJudul() + ", lokasi: " + getLokasi() + ", tarif: " + getHarga() + "}";
     }
 
     // Return tugas sebagai Hash Map agar mudah dikonsumsi oleh replicators dan datastores.
@@ -86,7 +116,7 @@ class Task {
         HashMap<String, Object> map = new HashMap<>();
         map.put("type", type);
         map.put("completed", completed);
-        map.put("description", description);
+        map.put("judul", judul);
         return map;
     }
 

@@ -7,10 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 
 /**
@@ -20,6 +24,8 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
 
     private final Context context;
     private final List<Task> tasks;
+    DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+    DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
 
     TaskAdapter(Context context, List<Task> tasks) {
         this.context = context;
@@ -51,16 +57,33 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.task_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_list, parent, false);
         }
 
-        TextView desc = (TextView) convertView.findViewById(R.id.task_description);
-        CheckBox completed = (CheckBox) convertView.findViewById(R.id.checkbox_completed);
+        TextView namaTempat = (TextView) convertView.findViewById(R.id.textViewJudul);
+        TextView tarif = (TextView) convertView.findViewById(R.id.textViewHarga);
+        TextView lokasi = (TextView) convertView.findViewById(R.id.textViewDeskripsi);
+        ImageView gambarLokasi = (ImageView) convertView.findViewById(R.id.imageView);
 
+        /*TextView desc = (TextView) convertView.findViewById(R.id.task_description);
+        CheckBox completed = (CheckBox) convertView.findViewById(R.id.checkbox_completed);*/
+        formatRp.setCurrencySymbol("Rp");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
         Task t = this.tasks.get(position);
-        desc.setText(t.getDescription());
+        String harga = "";
+        if (Integer.parseInt(String.valueOf(t.getHarga())) == 0)
+            harga = "GRATIS";
+        else
+            harga = String.valueOf(kursIndonesia.format(Integer.parseInt(t.getHarga()))) + ",00";
+        namaTempat.setText(t.getJudul());
+        tarif.setText(harga);
+        lokasi.setText(t.getLokasi());
+        Glide.with(context).load(t.getGambar()).into(gambarLokasi);
+        /*desc.setText(t.getJudul());
         completed.setChecked(t.isCompleted());
-        completed.setId(position);
+        completed.setId(position);*/
 
         return convertView;
     }
