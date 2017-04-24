@@ -2,23 +2,23 @@
 <resources>
 
     <string name="app_name">SpotIn</string>
-    <string name="create">Create</string>
-    <string name="update">Update</string>
-    <string name="cancel">Cancel</string>
-    <string name="action_download">Download (Pull)</string>
-    <string name="action_upload">Upload (Push)</string>
-    <string name="action_delete">Delete</string>
-    <string name="action_update">Update</string>
-    <string name="task_not_updated">Task not updated because description is empty</string>
-    <string name="new_task">New Task</string>
-    <string name="update_task">Update Task</string>
-    <string name="enter_description">Enter task description</string>
-    <string name="task_not_created">Task not created because description is empty</string>
-    <string name="replication_running">Replication is running</string>
-    <string name="replication_completed">Replication completed</string>
-    <string name="replication_error">Error replicating with Cloudant, ensure your Cloudant credentials are accurate, you have created a database with appropriate permissions, and you have connection to the internet. See Android logs for more info.</string>
-    <string name="replication_failed">Replication Failed</string>
+    <string name="create">Buat</string>
+    <string name="update">Perbarui</string>
+    <string name="cancel">Batal</string>
+    <string name="action_download">Mengunduh data</string>
+    <string name="action_upload">Mengunggah data</string>
+    <string name="action_delete">Hapus</string>
+    <string name="action_update">Perbarui</string>
+    <string name="task_not_updated">Jurnal tidak diperbarui karena deskripsi kosong</string>
+    <string name="new_task">Jurnal Baru</string>
+    <string name="update_task">Perbarui Jurnal</string>
+    <string name="enter_description">Masukkan deskripsi jurnal</string>
+    <string name="task_not_created">Jurnal tidak dibuat karena deskripsi kosong</string>
+    <string name="replication_running">Unduh data sedang berjalan</string>
+    <string name="replication_completed">Unduh data selesai</string>
+    <string name="replication_error">Error ketika mengunduh data</string>
+    <string name="replication_failed">Unduh data gagal</string>
     <string name="alert_dialog_ok">OK</string>
-    <string name="alert_dialog_close">Close Application</string>
+    <string name="alert_dialog_close">Tutup Aplikasi</string>
 
 </resources>

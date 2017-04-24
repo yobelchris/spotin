@@ -25,6 +25,7 @@ public class SplashScreen extends Activity {
                     //hapus SplashScreem dari View
                     Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
             }
             super.handleMessage(msg);
@@ -39,5 +40,11 @@ public class SplashScreen extends Activity {
         Message msg = new Message();
         msg.what = STOPSPLASH;
         splashHandler.sendMessageDelayed(msg, SPLASHTIME);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
     }
 }

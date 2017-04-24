@@ -47,14 +47,14 @@ public class TaskDialogFragment extends DialogFragment {
         final EditText description = (EditText) v.findViewById(R.id.new_task_desc);
 
         if (taskPosition >= 0) {
-            description.setHint(((Task) ((MainActivity) getActivity()).mTaskAdapter.getItem(taskPosition)).getJudul());
+            description.setHint(((Jurnal) ((JurnalActivity) getActivity()).mTaskAdapter.getItem(taskPosition)).getDescription());
 
             // Cek apakah ada deskripsi, jika ada tambahkan tugas, jika tidak menunjukkan kesalahan.
             DialogInterface.OnClickListener positiveClick = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     if (description.getText().length() > 0) {
-                        ((MainActivity) getActivity()).updateTaskAt(taskPosition, description.getText().toString());
+                        ((JurnalActivity) getActivity()).updateTaskAt(taskPosition, description.getText().toString());
                         description.getText().clear();
                     } else {
                         Toast.makeText(getActivity(),
@@ -70,7 +70,7 @@ public class TaskDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
                     if (description.getText().length() > 0) {
-                        ((MainActivity) getActivity()).createNewTask(description.getText().toString());
+                        ((JurnalActivity) getActivity()).createNewTask(description.getText().toString());
                         description.getText().clear();
                     } else {
                         Toast.makeText(getActivity(),
