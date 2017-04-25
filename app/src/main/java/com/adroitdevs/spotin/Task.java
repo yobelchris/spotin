@@ -33,6 +33,7 @@ class Task {
     private String deskripsi;
     private String telepon;
     private String koordinat;
+    private String lokKota;
 
     private Task() {
     }
@@ -58,6 +59,7 @@ class Task {
             t.setGambar((String) map.get("gambar"));
             t.setDeskripsi((String) map.get("deskripsi"));
             t.setKoordinat((String) map.get("koordinat"));
+            t.setLokKota((String) map.get("kota"));
             t.setTelepon((String) map.get("cp"));
             return t;
         }
@@ -150,4 +152,11 @@ class Task {
         return map;
     }
 
+    public String getLokKota() {
+        return lokKota;
+    }
+
+    public void setLokKota(String lokKota) {
+        this.lokKota = lokKota;
+    }
 }

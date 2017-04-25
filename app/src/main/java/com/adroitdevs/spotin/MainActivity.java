@@ -1,11 +1,17 @@
 package com.adroitdevs.spotin;
 
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -13,12 +19,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cloudant.sync.datastore.ConflictException;
 import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -31,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     static final String LOG_TAG = "MainActivity";
     public TaskAdapter mTaskAdapter;
+    public int budget = 0;
     ActionMode mActionMode = null; // Holder untuk interaksi action bar ketika di klik.
+    int angkabudget = 0;
     // Main data model objek.
     private TasksModel sTasks;
     private ListView listView;
@@ -106,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             fabSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    cari();
                 }
             });
         }
@@ -133,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
         BMSClient.getInstance().initialize(getApplicationContext(), BMSClient.REGION_US_SOUTH);
         // Muat Cloudant task dari model.
         this.reloadTasksFromModel();
+
+        showDialogBudget();
     }
 
     @Override
@@ -205,6 +220,70 @@ public class MainActivity extends AppCompatActivity {
 
         this.mTaskAdapter = new TaskAdapter(this, tasks);
         listView.setAdapter(this.mTaskAdapter);
+    }
+
+    private void reloadTasksFromModel(int harga, String kota) {
+
+        List<Task> tasks = sTasks.allTasks();
+        if (harga > 0 && (!kota.isEmpty())) {
+            List<Task> task1 = new ArrayList<>();
+            for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                if (Integer.parseInt(task.getHarga()) <= harga && task.getLokKota().toLowerCase().equals(kota.toLowerCase())) {
+                    task1.add(task);
+                }
+            }
+            if (task1 != null) {
+                this.mTaskAdapter = new TaskAdapter(this, task1);
+                Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
+            } else {
+                this.mTaskAdapter = new TaskAdapter(this, tasks);
+                Toast.makeText(this, "Data tidak ada", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            this.mTaskAdapter = new TaskAdapter(this, tasks);
+        }
+        listView.setAdapter(this.mTaskAdapter);
+
+        // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
+        /*Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
+            }
+        });*/
+    }
+
+    private void reloadTasksFromModel(String tempat) {
+
+        List<Task> tasks = sTasks.allTasks();
+        if (!tempat.isEmpty()) {
+            List<Task> task1 = new ArrayList<>();
+            for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                if (task.getJudul().toLowerCase().contains(tempat.toLowerCase())) {
+                    task1.add(task);
+                }
+            }
+            if (!task1.isEmpty()) {
+                this.mTaskAdapter = new TaskAdapter(this, task1);
+                Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
+            } else {
+                this.mTaskAdapter = new TaskAdapter(this, tasks);
+                Toast.makeText(this, "Data tidak ada", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            this.mTaskAdapter = new TaskAdapter(this, tasks);
+        }
+        listView.setAdapter(this.mTaskAdapter);
+
+        // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
+        /*Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
+            }
+        });*/
     }
 
     // Update task di lokasi yang diberikan saat update dikonfirmasi.
@@ -306,4 +385,138 @@ public class MainActivity extends AppCompatActivity {
         dismissDialog();
         showErrorDialog(R.string.replication_failed, getString(R.string.replication_error), false);
     }
+
+
+    private void showDialogBudget() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+        final View view = this.getLayoutInflater().inflate(R.layout.dialog_search, null);
+        final Spinner kota = (Spinner) view.findViewById(R.id.spinnerKota);
+        final RadioGroup rgSearch = (RadioGroup) view.findViewById(R.id.butGroup);
+        final EditText budget = (EditText) view.findViewById(R.id.textHarga);
+
+        budget.setInputType(InputType.TYPE_CLASS_NUMBER);
+        kota.setVisibility(View.GONE);
+        rgSearch.setVisibility(View.GONE);
+
+        builder.setView(view);
+        builder.setTitle("Masukkan budget Anda");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                angkabudget = Integer.parseInt(budget.getText().toString());
+                if (angkabudget != 0)
+                    setBudget(angkabudget);
+                else
+                    Toast.makeText(MainActivity.this, "Harap masukkan angka lebih dari nol", Toast.LENGTH_SHORT).show();
+            }
+        });
+        final AlertDialog alt = builder.create();
+        alt.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alt.getButton(DialogInterface.BUTTON_POSITIVE);
+                b.setEnabled(budget.getText().length() > 0);
+                budget.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        Button b = alt.getButton(DialogInterface.BUTTON_POSITIVE);
+                        b.setEnabled(budget.getText().length() > 0);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+            }
+        });
+        alt.show();
+    }
+
+    private void setBudget(int budget) {
+        this.budget = budget;
+    }
+
+    private void cari() {
+        AlertDialog.Builder buildAlt = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+        final View view = this.getLayoutInflater().inflate(R.layout.dialog_search, null);
+        final Spinner kota = (Spinner) view.findViewById(R.id.spinnerKota);
+        final RadioGroup rgSearch = (RadioGroup) view.findViewById(R.id.butGroup);
+        kota.setSelection(0);
+        final EditText harga = (EditText) view.findViewById(R.id.textHarga);
+        buildAlt.setTitle("Pencarian");
+        buildAlt.setPositiveButton("Cari", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (rgSearch.getCheckedRadioButtonId() == R.id.radHar) {
+                    reloadTasksFromModel(Integer.parseInt(harga.getText().toString()), kota.getSelectedItem().toString());
+                } else if (rgSearch.getCheckedRadioButtonId() == R.id.radTem) {
+                    reloadTasksFromModel(harga.getText().toString());
+                }
+            }
+        });
+        buildAlt.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        buildAlt.setView(view);
+        final AlertDialog alt = buildAlt.create();
+        alt.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                rgSearch.check(R.id.radHar);
+                harga.setInputType(InputType.TYPE_CLASS_NUMBER);
+                rgSearch.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                        Button b = alt.getButton(DialogInterface.BUTTON_POSITIVE);
+                        if (checkedId == R.id.radTem) {
+                            view.findViewById(R.id.spinnerKota).setVisibility(View.GONE);
+                            harga.setVisibility(View.VISIBLE);
+                            harga.setInputType(InputType.TYPE_CLASS_TEXT);
+                            harga.setHint("Masukkan nama tempat");
+                            b.setEnabled(harga.getText().length() > 0);
+                        } else if (checkedId == R.id.radHar) {
+                            view.findViewById(R.id.spinnerKota).setVisibility(View.VISIBLE);
+                            harga.setVisibility(View.VISIBLE);
+                            harga.setInputType(InputType.TYPE_CLASS_NUMBER);
+                            harga.setHint("Masukkan harga");
+                            b.setEnabled(harga.getText().length() > 0);
+                        }
+                    }
+                });
+                Button b = alt.getButton(DialogInterface.BUTTON_POSITIVE);
+                b.setEnabled(harga.getText().length() > 0);
+                harga.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        Button b = alt.getButton(DialogInterface.BUTTON_POSITIVE);
+                        b.setEnabled(harga.getText().length() > 0);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+
+            }
+        });
+        alt.show();
+    }
+
+
 }
