@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
         showProgressDialog(R.string.action_download, "Sinkronisasi data");
         sTasks.startPullReplication();
     }

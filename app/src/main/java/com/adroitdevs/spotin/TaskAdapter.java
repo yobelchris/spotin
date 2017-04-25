@@ -1,16 +1,22 @@
 package com.adroitdevs.spotin;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.DataSetObserver;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -66,6 +72,8 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         TextView tarif = (TextView) convertView.findViewById(R.id.textViewHarga);
         TextView lokasi = (TextView) convertView.findViewById(R.id.textViewDeskripsi);
         ImageView gambarLokasi = (ImageView) convertView.findViewById(R.id.imageView);
+        ImageButton imageButtonCall = (ImageButton) convertView.findViewById(R.id.buttonCall);
+        ImageButton imageButtonMap = (ImageButton) convertView.findViewById(R.id.buttonMap);
 
         /*TextView desc = (TextView) convertView.findViewById(R.id.task_description);
         CheckBox completed = (CheckBox) convertView.findViewById(R.id.checkbox_completed);*/
@@ -89,6 +97,30 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         dataDetail.add(2, t.getLokasi());
         dataDetail.add(3, t.getDeskripsi());
         dataDetail.add(4, t.getGambar());
+        dataDetail.add(5, t.getKoordinat());
+        dataDetail.add(6, t.getTelepon());
+
+        imageButtonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + dataDetail.get(5));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                context.startActivity(mapIntent);
+            }
+        });
+
+        imageButtonCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + dataDetail.get(6)));
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(context, "Tidak ada aplikasi untuk menelfon", Toast.LENGTH_SHORT).show();
+                } else {
+                    context.startActivity(intent);
+                }
+            }
+        });
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
