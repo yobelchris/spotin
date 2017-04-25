@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -37,10 +38,13 @@ public class DetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + dataDetail.get(5));
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
+                if (dataDetail.get(5) != "") {
+                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + dataDetail.get(5));
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+                } else
+                    Toast.makeText(DetailActivity.this, "Lokasi tidak ada di google map", Toast.LENGTH_SHORT).show();
             }
         });
     }

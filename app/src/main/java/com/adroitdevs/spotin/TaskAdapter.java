@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,10 +84,16 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         kursIndonesia.setDecimalFormatSymbols(formatRp);
         final Task t = this.tasks.get(position);
         String harga = "";
-        if (Integer.parseInt(String.valueOf(t.getHarga())) == 0)
-            harga = "GRATIS";
-        else
-            harga = String.valueOf(kursIndonesia.format(Integer.parseInt(t.getHarga()))) + ",00";
+        String input = String.valueOf(t.getHarga());
+        if (TextUtils.isDigitsOnly(input)) {
+            if (Integer.parseInt(input) == 0)
+                harga = "GRATIS";
+            else
+                harga = String.valueOf(kursIndonesia.format(Integer.parseInt(t.getHarga()))) + ",00";
+        } else {
+            harga = "Format data tidak valid";
+        }
+
         namaTempat.setText(t.getJudul());
         tarif.setText(harga);
         lokasi.setText(t.getLokasi());
