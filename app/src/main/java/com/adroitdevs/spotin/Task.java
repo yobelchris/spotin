@@ -30,6 +30,7 @@ class Task {
     private String lokasi;
     private String harga;
     private String gambar;
+    private String deskripsi;
 
     private Task() {
     }
@@ -53,9 +54,18 @@ class Task {
             t.setHarga((String) map.get("tarif"));
             t.setLokasi((String) map.get("lokasi"));
             t.setGambar((String) map.get("gambar"));
+            t.setDeskripsi((String) map.get("deskripsi"));
             return t;
         }
         return null;
+    }
+
+    public String getDeskripsi() {
+        return deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
     }
 
     public String getGambar() {

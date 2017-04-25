@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
 
 //         Membuat tombol untuk membuat tugas baru.
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabJournal);
+        FloatingActionButton fabSearch = (FloatingActionButton) findViewById(R.id.fabSearch);
+
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        if (fabSearch != null) {
+            fabSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
 
         listView = (ListView) findViewById(R.id.list);
 

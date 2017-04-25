@@ -1,6 +1,7 @@
 package com.adroitdevs.spotin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,7 +55,7 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -71,7 +73,7 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         formatRp.setMonetaryDecimalSeparator(',');
         formatRp.setGroupingSeparator('.');
         kursIndonesia.setDecimalFormatSymbols(formatRp);
-        Task t = this.tasks.get(position);
+        final Task t = this.tasks.get(position);
         String harga = "";
         if (Integer.parseInt(String.valueOf(t.getHarga())) == 0)
             harga = "GRATIS";
@@ -81,6 +83,21 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         tarif.setText(harga);
         lokasi.setText(t.getLokasi());
         Glide.with(context).load(t.getGambar()).into(gambarLokasi);
+        final ArrayList<String> dataDetail = new ArrayList<>();
+        dataDetail.add(0, t.getJudul());
+        dataDetail.add(1, harga);
+        dataDetail.add(2, t.getLokasi());
+        dataDetail.add(3, t.getDeskripsi());
+        dataDetail.add(4, t.getGambar());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("detail", dataDetail);
+                context.startActivity(intent);
+            }
+        });
         /*desc.setText(t.getJudul());
         completed.setChecked(t.isCompleted());
         completed.setId(position);*/
