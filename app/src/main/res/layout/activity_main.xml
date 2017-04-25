@@ -17,15 +17,24 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="#1abc9c"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/judul"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="awdawdaawdawdawdawwadawdawdawd" />
+
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+
 
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/judul"
         android:layout_weight="1"
         android:background="#FFFFFF"
         android:choiceMode="singleChoice"
@@ -40,7 +49,9 @@
         android:layout_margin="@dimen/fab_margin"
         android:scaleType="center"
         android:src="@mipmap/search"
-        android:tint="#000" />
+        android:tint="#757575"
+        app:backgroundTint="#fff"
+        app:elevation="0dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabJournal"
@@ -50,6 +61,8 @@
         android:layout_margin="@dimen/fab_margin"
         android:scaleType="center"
         android:src="@mipmap/jurnal"
-        android:tint="#000" />
+        android:tint="#757575"
+        app:backgroundTint="#fff"
+        app:elevation="0dp" />
 
 </android.support.design.widget.CoordinatorLayout>

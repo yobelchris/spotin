@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,6 +30,8 @@ import android.widget.Toast;
 import com.cloudant.sync.datastore.ConflictException;
 import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     public int budget = 0;
     ActionMode mActionMode = null; // Holder untuk interaksi action bar ketika di klik.
     int angkabudget = 0;
+    DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+    DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
     // Main data model objek.
     private TasksModel sTasks;
     private ListView listView;
@@ -147,7 +152,12 @@ public class MainActivity extends AppCompatActivity {
         // Muat Cloudant task dari model.
         this.reloadTasksFromModel();
 
-        showDialogBudget();
+        boolean back = getIntent().getBooleanExtra("back", false);
+        if (back) {
+
+        } else {
+            showDialogBudget();
+        }
     }
 
     @Override
@@ -233,6 +243,12 @@ public class MainActivity extends AppCompatActivity {
                     task1.add(task);
                 }
             }
+            Collections.sort(task1, new Comparator<Task>() {
+                @Override
+                public int compare(Task task1, Task task2) {
+                    return task1.getJudul().compareToIgnoreCase(task2.getJudul());
+                }
+            });
             if (task1 != null) {
                 this.mTaskAdapter = new TaskAdapter(this, task1);
                 Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
@@ -393,19 +409,26 @@ public class MainActivity extends AppCompatActivity {
         final Spinner kota = (Spinner) view.findViewById(R.id.spinnerKota);
         final RadioGroup rgSearch = (RadioGroup) view.findViewById(R.id.butGroup);
         final EditText budget = (EditText) view.findViewById(R.id.textHarga);
+        formatRp.setCurrencySymbol("Rp");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
 
+        budget.setHint("Masukkan budget Anda");
         budget.setInputType(InputType.TYPE_CLASS_NUMBER);
         kota.setVisibility(View.GONE);
         rgSearch.setVisibility(View.GONE);
-
+        budget.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
         builder.setView(view);
         builder.setTitle("Masukkan budget Anda");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 angkabudget = Integer.parseInt(budget.getText().toString());
-                if (angkabudget != 0)
+                if (angkabudget != 0) {
                     setBudget(angkabudget);
+                    Toast.makeText(MainActivity.this, "Budget Anda " + String.valueOf(kursIndonesia.format(angkabudget)) + ",00", Toast.LENGTH_SHORT).show();
+                }
                 else
                     Toast.makeText(MainActivity.this, "Harap masukkan angka lebih dari nol", Toast.LENGTH_SHORT).show();
             }
@@ -415,7 +438,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onShow(DialogInterface dialog) {
                 Button b = alt.getButton(DialogInterface.BUTTON_POSITIVE);
-                b.setEnabled(budget.getText().length() > 0);
+                b.setEnabled(budget.getText().length() > 0 && budget.getText().length() <= 7);
                 budget.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -425,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         Button b = alt.getButton(DialogInterface.BUTTON_POSITIVE);
-                        b.setEnabled(budget.getText().length() > 0);
+                        b.setEnabled(budget.getText().length() > 0 && budget.getText().length() <= 7);
                     }
 
                     @Override
@@ -473,6 +496,7 @@ public class MainActivity extends AppCompatActivity {
             public void onShow(DialogInterface dialog) {
                 rgSearch.check(R.id.radHar);
                 harga.setInputType(InputType.TYPE_CLASS_NUMBER);
+                harga.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
                 rgSearch.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -482,13 +506,15 @@ public class MainActivity extends AppCompatActivity {
                             harga.setVisibility(View.VISIBLE);
                             harga.setInputType(InputType.TYPE_CLASS_TEXT);
                             harga.setHint("Masukkan nama tempat");
+                            harga.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
                             b.setEnabled(harga.getText().length() > 0);
                         } else if (checkedId == R.id.radHar) {
                             view.findViewById(R.id.spinnerKota).setVisibility(View.VISIBLE);
                             harga.setVisibility(View.VISIBLE);
                             harga.setInputType(InputType.TYPE_CLASS_NUMBER);
                             harga.setHint("Masukkan harga");
-                            b.setEnabled(harga.getText().length() > 0);
+                            harga.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
+                            b.setEnabled(harga.getText().length() > 0 && harga.getText().length() <= 7);
                         }
                     }
                 });
