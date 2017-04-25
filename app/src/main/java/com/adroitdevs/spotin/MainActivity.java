@@ -147,8 +147,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        showProgressDialog(R.string.action_download, "Sinkronisasi data");
-        sTasks.startPullReplication();
+        boolean back = getIntent().getBooleanExtra("back", false);
+        if (back == true) {
+
+        } else {
+            showProgressDialog(R.string.action_download, "Sinkronisasi data");
+            sTasks.startPullReplication();
+        }
     }
 
     // Membuat menu replikasi / pengaturan default di title bar.

@@ -100,6 +100,7 @@ public class JurnalActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(JurnalActivity.this, MainActivity.class);
+                    intent.putExtra("back", true);
                     startActivity(intent);
                 }
             });

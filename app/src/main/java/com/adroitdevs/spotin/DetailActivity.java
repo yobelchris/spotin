@@ -47,7 +47,9 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("back", true);
+        startActivity(intent);
         return true;
     }
 }
