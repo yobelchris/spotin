@@ -20,6 +20,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:text="Budget Anda"
+            android:textColor="#c0392b" />
+
+        <TextView
+            android:id="@+id/budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp5.000,00"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Tarif"
             android:textColor="#c0392b" />
 
@@ -27,7 +42,24 @@
             android:id="@+id/tarif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rp5.000,00" />
+            android:text="Rp5.000,00"
+            android:textColor="@android:color/holo_green_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Sisa Budget Anda"
+            android:textColor="#c0392b" />
+
+        <TextView
+            android:id="@+id/sisa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp5.000,00"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
@@ -41,6 +73,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Jl. Halmahera II" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Kontak"
+            android:textColor="#c0392b" />
+
+        <TextView
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="082139193838"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"

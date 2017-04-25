@@ -26,6 +26,7 @@ class Task {
     // Variabel untuk tanda centang selesai.
     private boolean completed;
     // Teks tugas utama
+    private String id;
     private String judul;
     private String lokasi;
     private String harga;
@@ -34,7 +35,7 @@ class Task {
     private String telepon;
     private String koordinat;
     private String lokKota;
-
+    private String tipe;
     private Task() {
     }
 
@@ -61,9 +62,27 @@ class Task {
             t.setKoordinat((String) map.get("koordinat"));
             t.setLokKota((String) map.get("kota"));
             t.setTelepon((String) map.get("cp"));
+            t.setTipe((String) map.get("tipe"));
+            t.setId((String) map.get("_id"));
             return t;
         }
         return null;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTipe() {
+        return tipe;
+    }
+
+    public void setTipe(String tipe) {
+        this.tipe = tipe;
     }
 
     public String getTelepon() {

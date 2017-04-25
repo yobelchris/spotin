@@ -30,15 +30,16 @@ import java.util.List;
  * Custom List Adapter untuk menjembatani kesenjangan antara tampilan daftar visual dan datastore Cloudant
  */
 class TaskAdapter extends BaseAdapter implements ListAdapter {
-
     private final Context context;
     private final List<Task> tasks;
+    ITaskAdapter mITaskAdapter;
     DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
     DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
 
     TaskAdapter(Context context, List<Task> tasks) {
         this.context = context;
         this.tasks = tasks;
+        mITaskAdapter = (ITaskAdapter) context;
     }
 
     @Override
@@ -106,6 +107,7 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         dataDetail.add(4, t.getGambar());
         dataDetail.add(5, t.getKoordinat());
         dataDetail.add(6, t.getTelepon());
+        dataDetail.add(7, t.getHarga());
 
         imageButtonMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,9 +134,7 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("detail", dataDetail);
-                context.startActivity(intent);
+                mITaskAdapter.detail(dataDetail);
             }
         });
         /*desc.setText(t.getJudul());
@@ -190,5 +190,9 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
      */
     void remove(int position) {
         this.tasks.remove(position);
+    }
+
+    public interface ITaskAdapter {
+        void detail(ArrayList<String> detailData);
     }
 }

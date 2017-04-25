@@ -19,12 +19,6 @@
             android:background="#1abc9c"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <TextView
-                android:id="@+id/judul"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="awdawdaawdawdawdawwadawdawdawd" />
-
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

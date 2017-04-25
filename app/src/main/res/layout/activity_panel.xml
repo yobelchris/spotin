@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.adroitdevs.spotin.PanelActivity">
+
+    <ImageButton
+        android:id="@+id/toGo"
+        android:layout_width="match_parent"
+        android:padding="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/togo1"
+        app:layout_heightPercent="33.3%" />
+
+    <ImageButton
+        android:id="@+id/toEat"
+        android:layout_width="match_parent"
+        android:layout_below="@id/toGo"
+        android:padding="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/toeat1"
+        app:layout_heightPercent="33.3%" />
+
+    <ImageButton
+        android:id="@+id/toSleep"
+        android:layout_width="match_parent"
+        android:layout_below="@id/toEat"
+        android:padding="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/tosleep1"
+        app:layout_heightPercent="33.4%" />
+</android.support.percent.PercentRelativeLayout>

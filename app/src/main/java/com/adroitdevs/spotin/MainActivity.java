@@ -19,7 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,7 +27,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.cloudant.sync.datastore.ConflictException;
 import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 
 import java.text.DecimalFormat;
@@ -41,9 +40,11 @@ import java.util.List;
 /**
  * Main list activity yang mengkonfigurasi dan memulai sinkronisasi Cloudant.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskAdapter.ITaskAdapter {
 
     static final String LOG_TAG = "MainActivity";
+    private final static String TIPE = "tipe";
+    private final static String BUDGET = "budget";
     public TaskAdapter mTaskAdapter;
     public int budget = 0;
     ActionMode mActionMode = null; // Holder untuk interaksi action bar ketika di klik.
@@ -53,51 +54,19 @@ public class MainActivity extends AppCompatActivity {
     // Main data model objek.
     private TasksModel sTasks;
     private ListView listView;
-    // Action mode menangani interaksi action bar (tombol update / delete) yang dibuat saat list item ditekan.
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+    private String tipe = "";
 
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.context_menu, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_delete:
-                    deleteTaskAt(listView.getCheckedItemPosition());
-                    mode.finish();
-                    return true;
-                case R.id.action_update:
-                    showTaskDialog(R.string.update_task, listView.getCheckedItemPosition());
-                    mode.finish();
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            listView.setItemChecked(listView.getCheckedItemPosition(), false);
-            mActionMode = null;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Melindungi penciptaan statis TasksModel tunggal.
         if (sTasks == null) {
             // Model harus tetap ada selama masa pakai aplikasi.
@@ -116,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(MainActivity.this, JurnalActivity.class);
+                    intent.putExtra(TIPE, tipe);
+                    intent.putExtra(BUDGET, budget);
                     startActivity(intent);
                 }
             });
@@ -132,32 +103,24 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.list);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position, long lon) {
-
-                if (mActionMode != null) {
-                    mActionMode.finish();
-                }
-
-                // Buat item yang baru diklik yang saat ini dipilih.
-                listView.setItemChecked(position, true);
-                mActionMode = listView.startActionMode(mActionModeCallback);
-            }
-        });
-
         // Core SDK harus diinisialisasi untuk berinteraksi dengan layanan Bluemix Mobile.
         BMSClient.getInstance().initialize(getApplicationContext(), BMSClient.REGION_US_SOUTH);
         // Muat Cloudant task dari model.
-        this.reloadTasksFromModel();
+        tipe = getIntent().getStringExtra(TIPE);
+        this.reloadTasksFromModel(tipe);
 
         boolean back = getIntent().getBooleanExtra("back", false);
         if (back) {
-
+            budget = getIntent().getIntExtra(BUDGET, 0);
         } else {
             showDialogBudget();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(MainActivity.this, PanelActivity.class));
     }
 
     @Override
@@ -208,38 +171,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Buat task baru dan tambahkan ke daftar datastore Cloudant dan daftar adaptor lokal.
-    public void createNewTask(String desc) {
-        Task t = new Task(desc);
-        sTasks.createDocument(t);
-        reloadTasksFromModel();
-    }
-
     // Mengkopikan Local Cloudant Store ke dalam Array List untuk adaptor untuk menerjemahkan Tasks ke List View.
-    private void reloadTasksFromModel() {
+    private void reloadTasksFromModel(String tipe) {
 
         List<Task> tasks = sTasks.allTasks();
-
+        List<Task> tasks1 = new ArrayList<>();
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.getTipe().equals(tipe))
+                tasks1.add(task);
+        }
         // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
-        Collections.sort(tasks, new Comparator<Task>() {
+        Collections.sort(tasks1, new Comparator<Task>() {
             @Override
             public int compare(Task task1, Task task2) {
                 return task1.getJudul().compareToIgnoreCase(task2.getJudul());
             }
         });
 
-        this.mTaskAdapter = new TaskAdapter(this, tasks);
+        this.mTaskAdapter = new TaskAdapter(this, tasks1);
         listView.setAdapter(this.mTaskAdapter);
     }
 
-    private void reloadTasksFromModel(int harga, String kota) {
+    private void reloadTasksFromModel(int harga, String kota, String tipe) {
 
         List<Task> tasks = sTasks.allTasks();
         if (harga > 0 && (!kota.isEmpty())) {
             List<Task> task1 = new ArrayList<>();
             for (int i = 0; i < tasks.size(); i++) {
                 Task task = tasks.get(i);
-                if (Integer.parseInt(task.getHarga()) <= harga && task.getLokKota().toLowerCase().equals(kota.toLowerCase())) {
+                if (Integer.parseInt(task.getHarga()) <= harga && task.getLokKota().toLowerCase().equals(kota.toLowerCase()) && task.getTipe().equals(tipe)) {
                     task1.add(task);
                 }
             }
@@ -270,14 +231,14 @@ public class MainActivity extends AppCompatActivity {
         });*/
     }
 
-    private void reloadTasksFromModel(String tempat) {
+    private void reloadTasksFromModel(String tempat, String tipe) {
 
         List<Task> tasks = sTasks.allTasks();
         if (!tempat.isEmpty()) {
             List<Task> task1 = new ArrayList<>();
             for (int i = 0; i < tasks.size(); i++) {
                 Task task = tasks.get(i);
-                if (task.getJudul().toLowerCase().contains(tempat.toLowerCase())) {
+                if (task.getJudul().toLowerCase().contains(tempat.toLowerCase()) && task.getTipe().equals(tipe)) {
                     task1.add(task);
                 }
             }
@@ -300,35 +261,6 @@ public class MainActivity extends AppCompatActivity {
                 return task1.getJudul().compareToIgnoreCase(task2.getJudul());
             }
         });*/
-    }
-
-    // Update task di lokasi yang diberikan saat update dikonfirmasi.
-    public void updateTaskAt(int position, String description) {
-        try {
-            Task t = (Task) mTaskAdapter.getItem(position);
-            t.setJudul(description);
-            sTasks.updateDocument(t);
-            reloadTasksFromModel();
-            Toast.makeText(MainActivity.this,
-                    "Updated item : " + t.getJudul(),
-                    Toast.LENGTH_SHORT).show();
-        } catch (ConflictException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    // Hapus task di lokasi yang diberikan saat hapus ditekan.
-    private void deleteTaskAt(int position) {
-        try {
-            Task t = (Task) mTaskAdapter.getItem(position);
-            sTasks.deleteDocument(t);
-            mTaskAdapter.remove(position);
-            Toast.makeText(MainActivity.this,
-                    "Deleted item : " + t.getJudul(),
-                    Toast.LENGTH_SHORT).show();
-        } catch (ConflictException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -384,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
      * TasksModel menangani panggilan ini di thread utama.
      */
     void replicationComplete() {
-        reloadTasksFromModel();
+        reloadTasksFromModel(getIntent().getStringExtra("tipe"));
         Toast.makeText(getApplicationContext(),
                 R.string.replication_completed,
                 Toast.LENGTH_LONG).show();
@@ -397,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
      */
     void replicationError() {
         Log.i(LOG_TAG, getString(R.string.replication_error));
-        reloadTasksFromModel();
+        reloadTasksFromModel(getIntent().getStringExtra("tipe"));
         dismissDialog();
         showErrorDialog(R.string.replication_failed, getString(R.string.replication_error), false);
     }
@@ -477,9 +409,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (rgSearch.getCheckedRadioButtonId() == R.id.radHar) {
-                    reloadTasksFromModel(Integer.parseInt(harga.getText().toString()), kota.getSelectedItem().toString());
+                    reloadTasksFromModel(Integer.parseInt(harga.getText().toString()), kota.getSelectedItem().toString(), tipe);
                 } else if (rgSearch.getCheckedRadioButtonId() == R.id.radTem) {
-                    reloadTasksFromModel(harga.getText().toString());
+                    reloadTasksFromModel(harga.getText().toString(), tipe);
                 }
             }
         });
@@ -545,4 +477,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void detail(ArrayList<String> detailData) {
+        detailData.add(8, tipe);
+        detailData.add(9, String.valueOf(budget));
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("detail", detailData);
+        this.startActivity(intent);
+    }
 }

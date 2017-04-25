@@ -11,6 +11,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -25,6 +26,8 @@ import java.util.List;
 public class JurnalActivity extends AppCompatActivity {
 
     static final String LOG_TAG = "JurnalActivity";
+    public String tipe = "";
+    public int budget = 0;
     public JurnalAdapter mTaskAdapter;
     ActionMode mActionMode = null; // Holder untuk interaksi action bar ketika di klik.
     // Main data model objek.
@@ -70,6 +73,8 @@ public class JurnalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_jurnal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -101,6 +106,8 @@ public class JurnalActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(JurnalActivity.this, MainActivity.class);
                     intent.putExtra("back", true);
+                    intent.putExtra("tipe", tipe);
+                    intent.putExtra("budget", budget);
                     startActivity(intent);
                 }
             });
@@ -128,6 +135,8 @@ public class JurnalActivity extends AppCompatActivity {
 
         // Muat Cloudant task dari model.
         this.reloadTasksFromModel();
+        tipe = getIntent().getStringExtra("tipe");
+        budget = getIntent().getIntExtra("budget", 0);
     }
 
     @Override
