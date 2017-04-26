@@ -71,6 +71,17 @@ public class JurnalActivity extends AppCompatActivity {
     };
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(JurnalActivity.this, MainActivity.class);
+        intent.putExtra("back", true);
+        intent.putExtra("tipe", tipe);
+        intent.putExtra("budget", budget);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -109,6 +120,7 @@ public class JurnalActivity extends AppCompatActivity {
                     intent.putExtra("tipe", tipe);
                     intent.putExtra("budget", budget);
                     startActivity(intent);
+                    finish();
                 }
             });
         }

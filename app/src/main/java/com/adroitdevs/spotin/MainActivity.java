@@ -51,11 +51,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
     int angkabudget = 0;
     DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
     DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
+    DialogFragment newProgressFragment;
     // Main data model objek.
     private TasksModel sTasks;
     private ListView listView;
     private String tipe = "";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(MainActivity.this, PanelActivity.class));
+        finish();
     }
 
     @Override
@@ -196,11 +197,49 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
     private void reloadTasksFromModel(int harga, String kota, String tipe) {
 
         List<Task> tasks = sTasks.allTasks();
-        if (harga > 0 && (!kota.isEmpty())) {
+        if (harga >= 0 && (!kota.isEmpty())) {
             List<Task> task1 = new ArrayList<>();
             for (int i = 0; i < tasks.size(); i++) {
                 Task task = tasks.get(i);
                 if (Integer.parseInt(task.getHarga()) <= harga && task.getLokKota().toLowerCase().equals(kota.toLowerCase()) && task.getTipe().equals(tipe)) {
+                    task1.add(task);
+                }
+            }
+            Collections.sort(task1, new Comparator<Task>() {
+                @Override
+                public int compare(Task task1, Task task2) {
+                    return task1.getJudul().compareToIgnoreCase(task2.getJudul());
+                }
+            });
+            if (task1 != null) {
+                this.mTaskAdapter = new TaskAdapter(this, task1);
+                Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
+            } else {
+                this.mTaskAdapter = new TaskAdapter(this, tasks);
+                Toast.makeText(this, "Data tidak ada", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            this.mTaskAdapter = new TaskAdapter(this, tasks);
+        }
+        listView.setAdapter(this.mTaskAdapter);
+
+        // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
+        /*Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
+            }
+        });*/
+    }
+
+    private void reloadTasksFromModel(int harga, String tipe) {
+
+        List<Task> tasks = sTasks.allTasks();
+        if (harga >= 0) {
+            List<Task> task1 = new ArrayList<>();
+            for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                if (Integer.parseInt(task.getHarga()) <= harga && task.getTipe().equals(tipe)) {
                     task1.add(task);
                 }
             }
@@ -292,8 +331,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
      * @param title   Dialog judul banner (Upload/Download).
      * @param message Menginformasian pengguna apa yang terjadi (Mengirim/Mengambil data).
      */
+
+
     public void showProgressDialog(int title, String message) {
-        DialogFragment newProgressFragment = ProgressDialogFragment.newInstance(title, message);
+        newProgressFragment = ProgressDialogFragment.newInstance(title, message);
         newProgressFragment.show(getFragmentManager(), "progress");
     }
 
@@ -301,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
      * Tutup dialog setelah proses selesai.
      */
     public void dismissDialog() {
-        ((DialogFragment) getFragmentManager().findFragmentByTag("progress")).dismiss();
+        newProgressFragment.dismiss();
     }
 
     // Dipanggil saat pengguna memutuskan untuk menghentikan push / pull pada saat replikasi.
@@ -359,9 +400,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
                 angkabudget = Integer.parseInt(budget.getText().toString());
                 if (angkabudget != 0) {
                     setBudget(angkabudget);
+                    reloadTasksFromModel(angkabudget, tipe);
                     Toast.makeText(MainActivity.this, "Budget Anda " + String.valueOf(kursIndonesia.format(angkabudget)) + ",00", Toast.LENGTH_SHORT).show();
-                }
-                else
+                } else
                     Toast.makeText(MainActivity.this, "Harap masukkan angka lebih dari nol", Toast.LENGTH_SHORT).show();
             }
         });

@@ -102,6 +102,14 @@
             android:layout_height="wrap_content"
             android:text="Deskripsi" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Recomended"
+            android:textColor="#c0392b" />
+
+        <include layout="@layout/reclayout" />
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
