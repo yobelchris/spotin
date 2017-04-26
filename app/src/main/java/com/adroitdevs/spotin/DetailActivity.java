@@ -31,8 +31,6 @@ import com.bumptech.glide.Glide;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITaskAdapter {
@@ -97,9 +95,13 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
             }
         });
         tipe = dataDetail.get(8);
-        tarifuang = Integer.parseInt(dataDetail.get(9));
+        tarifuang = Integer.parseInt(dataDetail.get(7));
         budget = Integer.parseInt(dataDetail.get(9));
-        reloadTasksFromModel(budget - Integer.parseInt(dataDetail.get(7)), dataDetail.get(0));
+        if (budget == 0)
+            reloadTasksFromModel(tarifuang, dataDetail.get(0));
+        else
+            reloadTasksFromModel(sisauang, dataDetail.get(0));
+        Toast.makeText(DetailActivity.this, "" + sisauang, Toast.LENGTH_SHORT).show();
         tarif.setFocusableInTouchMode(true);
         tarif.setFocusable(true);
         tarif.requestFocus();
@@ -149,7 +151,7 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
                     budgetView.setText(kursIndonesia.format(angkabudget));
                     sisauang = angkabudget - tarifuang;
                     sisa.setText(kursIndonesia.format(sisauang));
-                    Toast.makeText(DetailActivity.this, "Budget Anda " + String.valueOf(kursIndonesia.format(angkabudget)) + ",00", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailActivity.this, "Budget Anda " + String.valueOf(kursIndonesia.format(angkabudget)), Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(DetailActivity.this, "Harap masukkan angka lebih dari nol", Toast.LENGTH_SHORT).show();
             }
@@ -188,24 +190,44 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
 
     private void reloadTasksFromModel(int sisBudg, String judul) {
         List<Task> tasks = sTasks.allTasks();
-        Collections.sort(tasks, new Comparator<Task>() {
-            @Override
-            public int compare(Task task1, Task task2) {
-                return task2.getHarga().compareToIgnoreCase(task1.getHarga());
+        int indexMin = 0;
+        ArrayList<Integer> harg = new ArrayList<>();
+        ArrayList<Integer> id = new ArrayList<>();
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            harg.add(Integer.parseInt(task.getHarga()));
+        }
+        for (int i = 0; i < harg.size(); i++) {
+            indexMin = i;
+            for (int j = i + 1; j < harg.size(); j++) {
+                if (harg.get(j) > harg.get(indexMin)) {
+                    indexMin = j;
+                }
             }
-        });
+            int temp = harg.get(i);
+            id.add(indexMin);
+            harg.set(i, harg.get(indexMin));
+            harg.set(indexMin, temp);
+        }
         int cek = 0;
         if (sisBudg > 0) {
             List<Task> task1 = new ArrayList<>();
-            for (int i = 0; i < tasks.size(); i++) {
-                Task task = tasks.get(i);
+            for (int idsen : id) {
+                Task task = tasks.get(idsen);
                 if (Integer.parseInt(task.getHarga()) <= sisBudg && cek < 5 && !task.getJudul().equals(judul)) {
                     task1.add(task);
                     cek++;
                 }
             }
+            /*for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                if (Integer.parseInt(task.getHarga()) <= sisBudg && cek < 5 && !(task.getJudul().equals(judul))) {
+                    task1.add(task);
+                    cek++;
+                }
+            }*/
             this.mTaskAdapter = new TaskAdapter(this, task1);
-            Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Data berhasil di load " + sisBudg, Toast.LENGTH_SHORT).show();
         } else {
             this.mTaskAdapter = new TaskAdapter(this, tasks);
             Toast.makeText(this, "Data gagal di load", Toast.LENGTH_SHORT).show();

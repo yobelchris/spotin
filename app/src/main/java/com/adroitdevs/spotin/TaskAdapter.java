@@ -90,7 +90,7 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
             if (Integer.parseInt(input) == 0)
                 harga = "GRATIS";
             else
-                harga = String.valueOf(kursIndonesia.format(Integer.parseInt(t.getHarga()))) + ",00";
+                harga = String.valueOf(kursIndonesia.format(Integer.parseInt(t.getHarga())));
         } else {
             harga = "Format data tidak valid";
         }

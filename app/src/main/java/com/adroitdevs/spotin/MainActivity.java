@@ -32,8 +32,6 @@ import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -183,12 +181,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
                 tasks1.add(task);
         }
         // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
-        Collections.sort(tasks1, new Comparator<Task>() {
+        /*Collections.sort(tasks1, new Comparator<Task>() {
             @Override
             public int compare(Task task1, Task task2) {
                 return task1.getJudul().compareToIgnoreCase(task2.getJudul());
             }
-        });
+        });*/
 
         this.mTaskAdapter = new TaskAdapter(this, tasks1);
         listView.setAdapter(this.mTaskAdapter);
@@ -205,12 +203,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
                     task1.add(task);
                 }
             }
-            Collections.sort(task1, new Comparator<Task>() {
-                @Override
-                public int compare(Task task1, Task task2) {
-                    return task1.getJudul().compareToIgnoreCase(task2.getJudul());
-                }
-            });
             if (task1 != null) {
                 this.mTaskAdapter = new TaskAdapter(this, task1);
                 Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
@@ -243,12 +235,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
                     task1.add(task);
                 }
             }
-            Collections.sort(task1, new Comparator<Task>() {
-                @Override
-                public int compare(Task task1, Task task2) {
-                    return task1.getJudul().compareToIgnoreCase(task2.getJudul());
-                }
-            });
             if (task1 != null) {
                 this.mTaskAdapter = new TaskAdapter(this, task1);
                 Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
@@ -281,13 +267,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
                     task1.add(task);
                 }
             }
-            if (!task1.isEmpty()) {
                 this.mTaskAdapter = new TaskAdapter(this, task1);
                 Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
-            } else {
-                this.mTaskAdapter = new TaskAdapter(this, tasks);
-                Toast.makeText(this, "Data tidak ada", Toast.LENGTH_SHORT).show();
-            }
         } else {
             this.mTaskAdapter = new TaskAdapter(this, tasks);
         }
@@ -401,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
                 if (angkabudget != 0) {
                     setBudget(angkabudget);
                     reloadTasksFromModel(angkabudget, tipe);
-                    Toast.makeText(MainActivity.this, "Budget Anda " + String.valueOf(kursIndonesia.format(angkabudget)) + ",00", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Budget Anda " + String.valueOf(kursIndonesia.format(angkabudget)), Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(MainActivity.this, "Harap masukkan angka lebih dari nol", Toast.LENGTH_SHORT).show();
             }
