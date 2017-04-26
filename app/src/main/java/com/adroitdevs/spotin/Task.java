@@ -5,17 +5,6 @@ import com.cloudant.sync.datastore.DocumentRevision;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- * Objek mewakili sebuah task.
- *
- * Serta bertindak sebagai objek nilai, kelas ini juga memiliki referensi ke DocumentRevision asli,
- * yang akan berlaku jika Tugas diambil dari database,
- * atau null (misalnya untuk Tasks yang telah dibuat namun belum disimpan ke Database).
- *
- * fromRevision() dan asMap() bertindak sebagai helpers untuk memetakan dan dari JSON - dalam sebuah aplikasi nyata,
- * sesuatu yang lebih kompleks seperti mapper objek dapat digunakan.
- */
-
 class Task {
 
     // Doc type diperlukan untuk mengidentifikasi dan mengelompokkan tipe kolektif di datastore.
@@ -51,9 +40,6 @@ class Task {
         t.rev = rev;
 
         Map<String, Object> map = rev.asMap();
-        if (/*map.containsKey("type") && map.get("type").equals(Task.DOC_TYPE)*/true) {
-            /*t.setType((String) map.get("type"));
-            t.setCompleted((Boolean) map.get("completed"));*/
             t.setJudul((String) map.get("nama"));
             t.setHarga((String) map.get("tarif"));
             t.setLokasi((String) map.get("lokasi"));
@@ -65,8 +51,6 @@ class Task {
             t.setTipe((String) map.get("tipe"));
             t.setId((String) map.get("_id"));
             return t;
-        }
-        return null;
     }
 
     public String getId() {

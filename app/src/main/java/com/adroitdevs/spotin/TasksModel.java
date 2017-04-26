@@ -5,12 +5,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.cloudant.sync.datastore.ConflictException;
 import com.cloudant.sync.datastore.Datastore;
 import com.cloudant.sync.datastore.DatastoreManager;
 import com.cloudant.sync.datastore.DatastoreNotCreatedException;
-import com.cloudant.sync.datastore.DocumentBodyFactory;
-import com.cloudant.sync.datastore.DocumentException;
 import com.cloudant.sync.datastore.DocumentRevision;
 import com.cloudant.sync.event.Subscribe;
 import com.cloudant.sync.notifications.ReplicationCompleted;
@@ -86,58 +83,6 @@ class TasksModel {
         this.mListener = listener;
     }
 
-    /**
-     * Membuat sebuah task, menugaskan sebuah ID.
-     *
-     * @param task task untuk membuat.
-     * @return Revisi baru dokumen.
-     */
-    Task createDocument(Task task) {
-        DocumentRevision rev = new DocumentRevision();
-        rev.setBody(DocumentBodyFactory.create(task.asMap()));
-        try {
-            DocumentRevision created = this.mDatastore.createDocumentFromRevision(rev);
-            return Task.fromRevision(created);
-        } catch (DocumentException de) {
-            return null;
-        }
-    }
-
-    /**
-     * Memperbarui dokumen Task dalam datastore.
-     *
-     * @param task task untuk update.
-     * @return the revisi dari Task yang telah dipebarui.
-     * @throws ConflictException jika tugas yang dilalui memiliki rev yang tidak sesuai
-     *                           dengan rev saat ini di datastore.
-     */
-    Task updateDocument(Task task) throws ConflictException {
-        DocumentRevision rev = task.getDocumentRevision();
-        rev.setBody(DocumentBodyFactory.create(task.asMap()));
-        try {
-            DocumentRevision updated = this.mDatastore.updateDocumentFromRevision(rev);
-            return Task.fromRevision(updated);
-        } catch (DocumentException de) {
-            return null;
-        }
-    }
-
-    /**
-     * Menghapus dokumen Task dalam datastore.
-     *
-     * @param task task untuk dihapus
-     * @throws ConflictException jika tugas yang dilalui memiliki rev yang tidak sesuai
-     *                           dengan rev saat ini di datastore.
-     */
-    void deleteDocument(Task task) throws ConflictException {
-        this.mDatastore.deleteDocumentFromRevision(task.getDocumentRevision());
-    }
-
-    /**
-     * Mengembalikan semua {@code Task} dokumen-dokumen di dalam datastore.
-     *
-     * @return sebuah List<Task> objek ukuran taskCount
-     */
     List<Task> allTasks() {
         int nDocs = this.mDatastore.getDocumentCount();
         List<DocumentRevision> all = this.mDatastore.getAllDocuments(0, nDocs, true);

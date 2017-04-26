@@ -78,8 +78,6 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         ImageButton imageButtonMap = (ImageButton) convertView.findViewById(R.id.buttonMap);
         ImageButton imageButtonShare = (ImageButton) convertView.findViewById(R.id.buttonFavorite);
 
-        /*TextView desc = (TextView) convertView.findViewById(R.id.task_description);
-        CheckBox completed = (CheckBox) convertView.findViewById(R.id.checkbox_completed);*/
         formatRp.setCurrencySymbol("Rp");
         formatRp.setMonetaryDecimalSeparator(',');
         formatRp.setGroupingSeparator('.');
@@ -149,9 +147,6 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
                 mITaskAdapter.detail(dataDetail);
             }
         });
-        /*desc.setText(t.getJudul());
-        completed.setChecked(t.isCompleted());
-        completed.setId(position);*/
 
         return convertView;
     }

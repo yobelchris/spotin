@@ -15,8 +15,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -143,33 +141,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
         }
     }
 
-    // Membuat menu replikasi / pengaturan default di title bar.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Mengembangkan menu; Ini menambahkan item ke action bar jika ada.
-        getMenuInflater().inflate(R.menu.todo, menu);
-        return true;
-    }
-
-    // Menangani interaksi dengan menu dropdown di pojok.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        // Menangani item yang dipilih di dropdown di pojok
-        switch (item.getItemId()) {
-            case R.id.action_download:
-                showProgressDialog(R.string.action_download, "Pulling changes from Cloudant");
-                sTasks.startPullReplication();
-                return true;
-            case R.id.action_upload:
-                showProgressDialog(R.string.action_upload, "Pushing Changes to Cloudant");
-                sTasks.startPushReplication();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     // Mengkopikan Local Cloudant Store ke dalam Array List untuk adaptor untuk menerjemahkan Tasks ke List View.
     private void reloadTasksFromModel(String tipe) {
 
@@ -180,13 +151,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
             if (task.getTipe().equals(tipe))
                 tasks1.add(task);
         }
-        // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
-        /*Collections.sort(tasks1, new Comparator<Task>() {
-            @Override
-            public int compare(Task task1, Task task2) {
-                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
-            }
-        });*/
 
         this.mTaskAdapter = new TaskAdapter(this, tasks1);
         listView.setAdapter(this.mTaskAdapter);
@@ -214,14 +178,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
             this.mTaskAdapter = new TaskAdapter(this, tasks);
         }
         listView.setAdapter(this.mTaskAdapter);
-
-        // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
-        /*Collections.sort(tasks, new Comparator<Task>() {
-            @Override
-            public int compare(Task task1, Task task2) {
-                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
-            }
-        });*/
     }
 
     private void reloadTasksFromModel(int harga, String tipe) {
@@ -246,14 +202,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
             this.mTaskAdapter = new TaskAdapter(this, tasks);
         }
         listView.setAdapter(this.mTaskAdapter);
-
-        // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
-        /*Collections.sort(tasks, new Comparator<Task>() {
-            @Override
-            public int compare(Task task1, Task task2) {
-                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
-            }
-        });*/
     }
 
     private void reloadTasksFromModel(String tempat, String tipe) {
@@ -273,14 +221,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ITask
             this.mTaskAdapter = new TaskAdapter(this, tasks);
         }
         listView.setAdapter(this.mTaskAdapter);
-
-        // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.
-        /*Collections.sort(tasks, new Comparator<Task>() {
-            @Override
-            public int compare(Task task1, Task task2) {
-                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
-            }
-        });*/
     }
 
     /**

@@ -224,13 +224,6 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
                     cek++;
                 }
             }
-            /*for (int i = 0; i < tasks.size(); i++) {
-                Task task = tasks.get(i);
-                if (Integer.parseInt(task.getHarga()) <= sisBudg && cek < 5 && !(task.getJudul().equals(judul))) {
-                    task1.add(task);
-                    cek++;
-                }
-            }*/
             this.mTaskAdapter = new TaskAdapter(this, task1);
             Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
         } else {
@@ -238,14 +231,6 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
             Toast.makeText(this, "Data gagal di load", Toast.LENGTH_SHORT).show();
         }
         listView.setAdapter(this.mTaskAdapter);
-
-        // Urutkan list untuk menunjukkan urutan abjad, dari atas ke bawah.200
-        /*Collections.sort(tasks, new Comparator<Task>() {
-            @Override
-            public int compare(Task task1, Task task2) {
-                return task1.getJudul().compareToIgnoreCase(task2.getJudul());
-            }
-        });*/
     }
 
     @Override

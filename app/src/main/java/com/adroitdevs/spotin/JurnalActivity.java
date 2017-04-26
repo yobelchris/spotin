@@ -163,36 +163,6 @@ public class JurnalActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-        /*showProgressDialog(R.string.action_download, "Syncing with Cloudant");*/
-        /*sTasks.startPullReplication();*/
-    }
-
-    // Membuat menu replikasi / pengaturan default di title bar.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Mengembangkan menu; Ini menambahkan item ke action bar jika ada.
-        getMenuInflater().inflate(R.menu.todo, menu);
-        return true;
-    }
-
-    // Menangani interaksi dengan menu dropdown di pojok.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        // Menangani item yang dipilih di dropdown di pojok
-        switch (item.getItemId()) {
-            case R.id.action_download:
-                showProgressDialog(R.string.action_download, "Pulling changes from Cloudant");
-                sTasks.startPullReplication();
-                return true;
-            case R.id.action_upload:
-                showProgressDialog(R.string.action_upload, "Pushing Changes to Cloudant");
-                sTasks.startPushReplication();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     // Buat task baru dan tambahkan ke daftar datastore Cloudant dan daftar adaptor lokal.
