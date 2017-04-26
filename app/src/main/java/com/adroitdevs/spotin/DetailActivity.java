@@ -15,6 +15,8 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -47,6 +49,8 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
     DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
     private TasksModel sTasks;
     private ListView listView;
+    private String judulShare = "";
+    private String kontenShare = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +70,12 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final ArrayList<String> dataDetail = getIntent().getStringArrayListExtra("detail");
         setTitle(dataDetail.get(0));
+        judulShare = dataDetail.get(0);
         ImageView imageView = (ImageView) findViewById(R.id.imageFoto);
         Glide.with(this).load(dataDetail.get(4)).into(imageView);
         TextView deskripsi = (TextView) findViewById(R.id.deskripsi);
-        deskripsi.setText(dataDetail.get(3));
+        deskripsi.setText(dataDetail.get(3) + "\n\n" + "[All resource is originally by google, blog, and website.]");
+        kontenShare = dataDetail.get(3);
         TextView tarif = (TextView) findViewById(R.id.tarif);
         tarif.setText(dataDetail.get(1));
         TextView lokasi = (TextView) findViewById(R.id.lokasi);
@@ -101,7 +107,6 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
             reloadTasksFromModel(tarifuang, dataDetail.get(0));
         else
             reloadTasksFromModel(sisauang, dataDetail.get(0));
-        Toast.makeText(DetailActivity.this, "" + sisauang, Toast.LENGTH_SHORT).show();
         tarif.setFocusableInTouchMode(true);
         tarif.setFocusable(true);
         tarif.requestFocus();
@@ -227,7 +232,7 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
                 }
             }*/
             this.mTaskAdapter = new TaskAdapter(this, task1);
-            Toast.makeText(this, "Data berhasil di load " + sisBudg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Data berhasil di load", Toast.LENGTH_SHORT).show();
         } else {
             this.mTaskAdapter = new TaskAdapter(this, tasks);
             Toast.makeText(this, "Data gagal di load", Toast.LENGTH_SHORT).show();
@@ -270,5 +275,26 @@ public class DetailActivity extends AppCompatActivity implements TaskAdapter.ITa
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("detail", detailData);
         this.startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.bagi) {
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, judulShare);
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, kontenShare);
+            startActivity(Intent.createChooser(sharingIntent, "Bagikan tempat ini"));
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

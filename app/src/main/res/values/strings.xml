@@ -21,6 +21,7 @@
     <string name="alert_dialog_ok">OK</string>
     <string name="alert_dialog_close">Tutup Aplikasi</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="share_using">Test</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

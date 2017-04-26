@@ -76,6 +76,7 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
         ImageView gambarLokasi = (ImageView) convertView.findViewById(R.id.imageView);
         ImageButton imageButtonCall = (ImageButton) convertView.findViewById(R.id.buttonCall);
         ImageButton imageButtonMap = (ImageButton) convertView.findViewById(R.id.buttonMap);
+        ImageButton imageButtonShare = (ImageButton) convertView.findViewById(R.id.buttonFavorite);
 
         /*TextView desc = (TextView) convertView.findViewById(R.id.task_description);
         CheckBox completed = (CheckBox) convertView.findViewById(R.id.checkbox_completed);*/
@@ -128,6 +129,17 @@ class TaskAdapter extends BaseAdapter implements ListAdapter {
                 } else {
                     context.startActivity(intent);
                 }
+            }
+        });
+
+        imageButtonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, dataDetail.get(0));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, dataDetail.get(3));
+                context.startActivity(Intent.createChooser(sharingIntent, "Bagikan tempat ini"));
             }
         });
 
