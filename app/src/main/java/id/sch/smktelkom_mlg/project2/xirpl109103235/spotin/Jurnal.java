@@ -1,4 +1,4 @@
-package com.adroitdevs.spotin;
+package id.sch.smktelkom_mlg.project2.xirpl109103235.spotin;
 
 import com.cloudant.sync.datastore.DocumentRevision;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 public class Jurnal {
 
     // Doc type diperlukan untuk mengidentifikasi dan mengelompokkan tipe kolektif di datastore.
-    private static final String DOC_TYPE = "com.adroitdevs.spotin";
+    private static final String DOC_TYPE = "com.xirpl109103235.spotin";
     // Ini adalah nomor revisi dalam database yang mewakili tugas ini.
     private DocumentRevision rev;
     private String type = DOC_TYPE;

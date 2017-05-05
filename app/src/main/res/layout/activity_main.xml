@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.adroitdevs.spotin.MainActivity">
+    tools:context="com.xirpl109103235.spotin.project2.xirpl109103235.spotin.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

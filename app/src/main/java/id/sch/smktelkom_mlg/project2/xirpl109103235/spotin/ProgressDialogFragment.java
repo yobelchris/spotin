@@ -1,4 +1,4 @@
-package com.adroitdevs.spotin;
+package id.sch.smktelkom_mlg.project2.xirpl109103235.spotin;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

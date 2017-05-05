@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.adroitdevs.spotin">
+    package="id.sch.smktelkom_mlg.project2.xirpl109103235.spotin">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashScreen"
+            android:name="id.sch.smktelkom_mlg.project2.xirpl109103235.spotin.SplashScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,18 +23,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="id.sch.smktelkom_mlg.project2.xirpl109103235.spotin.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".JurnalActivity"
+            android:name="id.sch.smktelkom_mlg.project2.xirpl109103235.spotin.JurnalActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".DetailActivity"
+            android:name="id.sch.smktelkom_mlg.project2.xirpl109103235.spotin.DetailActivity"
             android:label="@string/title_activity_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PanelActivity"
+            android:name="id.sch.smktelkom_mlg.project2.xirpl109103235.spotin.PanelActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
